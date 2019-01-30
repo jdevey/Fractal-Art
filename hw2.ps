@@ -1,0 +1,301 @@
+302 srand
+
+/centerx 305 def
+/centery 515 def
+
+% L-SYSTEM 1 ---------------------------------------------------------------------------------------------------------
+
+%/gocenter1 {
+%	3 depth1 1 sub exp 120 cos mul linelength1 mul centerx add
+%	3 depth1 1 sub exp linelength1 mul 2 3 sqrt mul div centery add
+%	translate
+%} def
+
+/X1 {
+	1 sub /N1 exch def
+	N1 0 eq
+	{F1}
+	{N1 N1 N1 N1 X1 L1 X1 R1 R1 X1 L1 X1}
+	ifelse
+} def
+
+/F1 {
+	linelength1 0 rlineto
+} def
+
+/R1 { -60 rotate } def
+%/R1 { rand 3 mod 59 add neg rotate } def
+
+/L1 { 60 rotate } def
+%/L1 { rand 3 mod 59 add rotate } def
+
+/draw1stroke {
+	gsave
+	/depth1 exch def
+	/linelength1 exch def
+	%gocenter1
+	newpath
+	0 0 moveto
+	6 {
+		depth1 X1
+		R1 R1
+	} repeat
+	stroke
+	grestore
+} def
+
+/draw1fill {
+	gsave
+	/depth1 exch def
+	/linelength1 exch def
+	%gocenter1
+	newpath
+	0 0 moveto
+	6 {
+		depth1 X1
+		R1 R1
+	} repeat
+	fill
+	grestore
+} def
+
+% L-SYSTEM 2 ---------------------------------------------------------------------------------------------------------
+
+/X2 {
+	1 sub /N2 exch def
+	N2 0 ne
+	{N2 N2 X2 R2 Y2 F2 R2}
+	if
+} def
+
+/Y2 {
+	1 sub /M2 exch def
+	M2 0 ne
+	{M2 M2 L2 F2 X2 L2 Y2}
+	if
+} def
+
+/F2 {
+	linelength2 0 rlineto
+} def
+
+/R2 {
+	-91 rotate
+} def
+
+/L2 {
+	91 rotate
+} def
+
+/draw2 {
+	gsave
+	/depth2 exch def
+	/linelength2 exch def
+	newpath
+	0 0 moveto
+	F2 depth2 X2
+	stroke
+	grestore
+} def
+
+% L-SYSTEM 3 ---------------------------------------------------------------------------------------------------------
+
+/X3 {
+	1 sub /N3 exch def
+	N3 0 ne
+	%{N3 N3 N3 N3 N3 N3 N3 F3 R3 gsave gsave X3 grestore L3 X3 grestore L3 F3 gsave L3 F3 X3 grestore R3 X3}
+	{N3 N3 N3 N3 N3 N3 N3 F3 RND gsave gsave X3 grestore LND X3 grestore LND F3 gsave LND F3 X3 grestore RND X3}
+	if
+} def
+
+/F3 {
+	1 sub /M3 exch def
+	M3 0 eq
+	{
+		0 0 moveto
+		linelength3 0 lineto
+		stroke
+		linelength3 0 translate
+	}
+	{M3 M3 F3 F3}
+	ifelse
+} def
+
+/RND {
+	rand 40 mod neg rotate
+} def
+
+/LND {
+	rand 40 mod rotate
+} def
+
+/R3 {
+	-25 rotate
+} def
+
+/L3 {
+	25 rotate
+} def
+
+/draw3 {
+	gsave
+	/depth3 exch def
+	/linelength3 exch def
+	newpath
+	0 0 moveto
+	depth3 X3
+	stroke
+	grestore
+} def
+
+%brown
+0.08 setgray
+0 0 moveto 0 320 lineto 1000 320 lineto 1000 0 lineto fill
+
+%ground layering
+gsave
+-300 200 translate
+2 setlinewidth
+0 setgray
+30 {
+	181 0 translate
+	12 13 draw2
+} repeat
+grestore
+
+%blue
+gsave
+0.7 0.7 0.7 setrgbcolor
+0 310 moveto 0 1000 lineto 1000 1000 lineto 1000 310 lineto fill
+
+0.65 0.65 0.65 setrgbcolor
+0 310 translate
+
+9 {
+	gsave
+	8 {
+		0 0 moveto 0 40 lineto 40 40 lineto 40 0 lineto fill
+		0 80 translate
+	} repeat
+	grestore
+	40 40 translate
+
+	gsave
+	8 {
+		0 0 moveto 0 40 lineto 40 40 lineto 40 0 lineto fill
+		0 80 translate
+	} repeat
+	grestore
+	40 -40 translate
+} repeat
+
+grestore
+
+
+%green
+%0.06 0.3 0.06 setrgbcolor
+%0 300 moveto 0 370 lineto 1000 370 lineto 1000 300 lineto fill
+
+% trunk
+gsave
+1 setlinewidth
+
+0.2 0.2 0.2 setrgbcolor
+340 340 translate
+25 {
+	0.4 6 draw1fill
+	0 10 translate
+} repeat
+grestore
+
+gsave
+1 setlinewidth
+0.1 0.1 0.1 setrgbcolor
+340 340 translate
+25 {
+	0.4 6 draw1stroke
+	0 10 translate
+} repeat
+
+grestore
+
+gsave
+	0.4 setgray
+	388 590 translate
+
+	36 {
+		3.3 6 draw3
+		10 rotate
+	} repeat
+
+	36 {
+		0.55 6 draw3
+		10 rotate
+	} repeat
+
+	36 {
+		1.4 6 draw3
+		10 rotate
+	} repeat
+
+grestore
+
+/circ1 {
+	gsave
+		translate
+		1 0 0 setrgbcolor
+		0 0 6 0 360 arc
+		fill
+		%1 5 draw1fill
+		2 setlinewidth
+		0.5 0 0 setrgbcolor
+		0 0 6 0 360 arc
+		stroke
+		%1 5 draw1stroke
+	grestore
+} def
+
+/circ2 {
+	gsave
+		translate
+		0.9 setgray
+		0 0 6 0 360 arc
+		fill
+		%1 5 draw1fill
+		2 setlinewidth
+		0.8 setgray
+		0 0 6 0 360 arc
+		stroke
+		%1 5 draw1stroke
+	grestore
+} def
+
+230 550 circ1
+
+300 390 circ2
+550 420 circ2
+380 390 circ2
+500 500 circ2
+440 540 circ2
+300 550 circ2
+550 620 circ2
+380 590 circ2
+500 700 circ2
+440 640 circ2
+280 500 circ2
+330 460 circ2
+390 520 circ2
+260 730 circ2
+280 650 circ2
+400 720 circ2
+430 680 circ2
+200 500 circ2
+210 610 circ2
+600 500 circ2
+350 600 circ2
+360 760 circ2
+240 460 circ2
+355 680 circ2
+
+showpage
+

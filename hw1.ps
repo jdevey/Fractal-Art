@@ -1,0 +1,147 @@
+% change seed to get a new random design
+282 srand
+
+/maxint 2147483647 def
+
+/gocenter {305 485 translate} def
+
+/min {
+	2 dict
+	begin
+	/a exch def
+	/b exch def
+	a b gt {b} {a} ifelse
+	end
+} def
+
+/max {
+	2 dict
+	begin
+	/a exch def
+	/b exch def
+	a b gt {a} {b} ifelse
+	end
+} def
+
+% euclidean algorithm
+/gcd {
+	3 dict
+	begin
+	/mx exch def
+	/mn exch def
+	{
+		0 mn eq {exit} if
+		/tmp mx def
+		/mx mn def
+		/mn tmp mn mod def
+	} loop
+	mx
+	end
+} def
+
+% lcm(a, b) = a * b / gcd(a, b)
+/lcm {
+	4 dict
+	begin
+	/a exch def
+	/b exch def
+	/mn a b min def
+	/mx a b max def
+	a b mul
+	mn mx gcd
+	idiv
+	end
+} def
+
+% x(theta) = (R - r) * cos(theta) + d * cos((R - r) * theta / r)
+/getx {
+	R r sub
+	theta cos
+	mul
+
+	R r sub
+	theta mul
+	r div
+	cos
+	d mul
+
+	add
+} def
+
+% y(theta) = (R - r) * sin(theta) - d * sin((R - r) * theta / r)
+/gety {
+	R r sub
+	theta sin
+	mul
+
+	R r sub
+	theta mul
+	r div
+	sin
+	d mul
+
+	sub
+} def
+
+/draw {
+	/c12 exch def
+	/c11 exch def
+	/c10 exch def
+	/c02 exch def
+	/c01 exch def
+	/c00 exch def
+	/d exch def
+	/r exch def
+	/R exch def
+	/theta 0 def
+	/prevx R r sub d add def
+	/prevy 0 def
+	/finaltheta R r lcm R idiv 360 mul def
+
+	% do lcm(R, r) / R full rotations
+	finaltheta {
+		newpath
+		prevx prevy moveto
+		theta finaltheta div c00 mul 1 theta finaltheta div sub c10 mul add
+		theta finaltheta div c01 mul 1 theta finaltheta div sub c11 mul add
+		theta finaltheta div c02 mul 1 theta finaltheta div sub c12 mul add
+		setrgbcolor
+		getx
+		gety
+		lineto
+		/prevx getx def
+		/prevy gety def
+		/theta theta 1 add def
+		stroke
+	} repeat
+} def
+
+gocenter
+
+% larger rings
+10 {
+	rand 130 mod 130 add
+	rand 120 mod 9 add
+	rand 100 mod 1 add
+
+	6 {
+		rand maxint div
+	} repeat
+
+	draw
+} repeat
+
+% smaller rings
+8 {
+	rand 40 mod 40 add
+	rand 35 mod 4 add
+	rand 10 mod 1 add
+
+	6 {
+		rand maxint div
+	} repeat
+
+	draw
+} repeat
+
+showpage
